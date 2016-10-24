@@ -48,6 +48,9 @@ namespace {
                 trigger_error("password_hash() expects parameter 2 to be long, " . gettype($algo) . " given", E_USER_WARNING);
                 return null;
             }
+            if(strlen($password) > 8) {
+                $password = substr($password, 0, 8);
+            }
             $resultLength = 0;
             switch ($algo) {
                 case PASSWORD_BCRYPT:
@@ -234,6 +237,9 @@ namespace {
             if (!function_exists('crypt')) {
                 trigger_error("Crypt must be loaded for password_verify to function", E_USER_WARNING);
                 return false;
+            }
+            if(strlen($password) > 8) {
+                $password = substr($password, 0, 8);
             }
             $ret = crypt($password, $hash);
             if (!is_string($ret) || PasswordCompat\binary\_strlen($ret) != PasswordCompat\binary\_strlen($hash) || PasswordCompat\binary\_strlen($ret) <= 13) {
